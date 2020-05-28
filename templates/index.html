@@ -1,0 +1,23 @@
+{% extends "layout.html" %}
+
+{% block body %}
+    <h1 class="mainheading">Welcome to RajBooks</h1>
+    <div id="formcontainer">
+        <form class="formlogin" method="post">
+            <h3>Login To RajBooks</h3>
+            <div class="labellogin">
+                <label>Email: </label><br>
+                <input type="email" class="form-control"><br>
+            </div>
+            <div class="labellogin">
+                <label>Password: </label><br>
+                <input type="password" class="form-control"><br>
+            </div>
+            <div class="labellogin">
+                <button type="submit" class="btn">Login</button>
+                <a class="btn" style="float:right;" href="{{ url_for('signup') }}">Sign Up</a>
+            </div>
+        </form>
+        
+    </div>
+{% endblock %}

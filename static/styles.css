@@ -1,0 +1,59 @@
+body{
+    margin: 30px;
+    background-color: #F4EDEA;
+    color:#12263A;
+}
+
+.mainheading{
+    text-align: center;
+}
+
+#formcontainer{
+    padding:70px 0;
+}
+.formlogin{
+    margin: auto;
+    width: 25%;
+    border-style: solid;
+    padding: 20px;
+    border-radius:5px;
+    border-color: #12263A;
+    border-width: 2px;
+}
+
+.formsignup{
+    margin: auto;
+    width: 50%;
+    border-style: solid;
+    padding: 20px;
+    border-radius:5px;
+    border-color: #12263A;
+    border-width: 2px;
+}
+
+.labellogin{
+    margin: auto;
+    
+}
+
+.formlogin .btn
+{
+    color: #F4EDEA;
+    background-color:#06BCC1;
+    width: 45%;
+    margin:auto;
+    
+}
+
+.formsignup .btn
+{
+    color: #F4EDEA;
+    background-color:#06BCC1;
+    width: 30%;
+    margin:auto;
+    
+}
+
+.smallerror{
+    color:rgba(230, 1, 1, 0.952);
+}

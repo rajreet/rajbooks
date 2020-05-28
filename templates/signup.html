@@ -1,0 +1,34 @@
+{% extends "layout.html" %}
+
+{% block body %}
+    <h1 class="mainheading">Welcome to RajBooks</h1>
+    <div id="formcontainer">
+        
+        <form class="formsignup" method="post" action="{{ url_for('signup') }}">
+            <div class="alert alert-danger" role="alert" style="display:{{ disp }};">
+                {{ error }}
+              </div>
+            <h3>Sign Up For RajBooks</h3>
+            <div class="labellogin">
+                <label>Name: </label><br>
+                <input type="text" class="form-control" name="name"><br>
+            </div>
+            <div class="labellogin">
+                <label>Username: </label><br>
+                <input type="text" class="form-control" name="username" value="{{ utext }}">
+            </div>
+            <div class="labellogin">
+                <label>Email: </label><br>
+                <input type="email" class="form-control" name="email" placeholder="{{ uemail }}"><br>
+            </div>
+            <div class="labellogin">
+                <label>Password: </label><br>
+                <input type="password" class="form-control" name="password"><br>
+            </div>
+            <div class="labellogin">
+                <button class="btn">Sign Up</button>
+            </div>
+        </form>
+
+    </div>
+{% endblock %}
