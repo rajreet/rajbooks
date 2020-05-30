@@ -28,6 +28,24 @@ def index():
             return render_template("index.html",disp="block",message="You have been registered succesfully.")
         else:
             return render_template("index.html",disp="none")
+    else:
+        email=request.form.get("email")
+        password=request.form.get("password")
+        try:
+            passwords=db.execute(f"SELECT password FROM users WHERE email='{email}'").fetchone()
+            pwd=passwords[0]
+            # print(pwd)
+
+            if(pwd==password):
+                return redirect(url_for('books'))
+            else:
+                #invalid password
+                return render_template("index.html",disp="none",p_error="Invalid Password.")    
+        except:
+            # username not available
+            return render_template("index.html",disp="none",email_error="Email does not exists.")
+
+        
 
 
         

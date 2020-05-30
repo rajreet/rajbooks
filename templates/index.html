@@ -6,15 +6,17 @@
         {{ message }}
       </div>
     <div id="formcontainer">
-        <form class="formlogin" method="post">
+        <form class="formlogin" method="post" action="{{ url_for( 'index' )}}">
             <h3>Login To RajBooks</h3>
             <div class="labellogin">
                 <label>Email: </label><br>
-                <input type="email" class="form-control"><br>
+                <input type="email" class="form-control" name="email">
+                <small class=smallerror>{{email_error}}</small><br>
             </div>
             <div class="labellogin">
                 <label>Password: </label><br>
-                <input type="password" class="form-control"><br>
+                <input type="password" class="form-control" name="password">
+                <small class=smallerror>{{p_error}}</small><br>
             </div>
             <div class="labellogin">
                 <button type="submit" class="btn">Login</button>
