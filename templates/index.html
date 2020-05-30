@@ -2,6 +2,9 @@
 
 {% block body %}
     <h1 class="mainheading">Welcome to RajBooks</h1>
+    <div class="alert alert-success" role="alert" style="display:{{ disp }};" id="msg">
+        {{ message }}
+      </div>
     <div id="formcontainer">
         <form class="formlogin" method="post">
             <h3>Login To RajBooks</h3>

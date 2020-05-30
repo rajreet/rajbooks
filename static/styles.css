@@ -57,3 +57,9 @@ body{
 .smallerror{
     color:rgba(230, 1, 1, 0.952);
 }
+
+#msg{
+    text-align: center;
+    width:75%;
+    margin:auto;
+}

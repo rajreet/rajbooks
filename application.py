@@ -21,9 +21,16 @@ engine = create_engine(os.getenv("DATABASE_URL"))
 db = scoped_session(sessionmaker(bind=engine))
 
 
-@app.route("/")
+@app.route("/",methods=["POST","GET"])
 def index():
-    return render_template("index.html")
+    if request.method=="GET":
+        if 'display' in request.args:
+            return render_template("index.html",disp="block",message="You have been registered succesfully.")
+        else:
+            return render_template("index.html",disp="none")
+
+
+        
 
 @app.route("/signup",methods=["POST","GET"])
 def signup():
@@ -35,11 +42,20 @@ def signup():
         email=request.form.get("email")
         password=request.form.get("password")
 
+        if(name=="" or username=="" or email=="" or password==""):
+            return render_template("signup.html",disp="block",error="Fields cannot be empty.")
+
         try:
             db.execute("INSERT INTO users VALUES(:username,:name,:email,:password)",{"username":username,"name":name,"email":email,"password":password})
             db.commit()
-            return render_template("index.html")
+            return redirect(url_for('index',display=True))
         except:
             return render_template("signup.html",disp="block",error="Username or Email already exists.")
+
+@app.route("/books")
+def books():
+    return render_template("books.html")
+    
+
         
         
