@@ -45,11 +45,6 @@ def index():
             # username not available
             return render_template("index.html",disp="none",email_error="Email does not exists.")
 
-        
-
-
-        
-
 @app.route("/signup",methods=["POST","GET"])
 def signup():
     if(request.method=="GET"):
@@ -60,6 +55,7 @@ def signup():
         email=request.form.get("email")
         password=request.form.get("password")
 
+        #Check empty fields 
         if(name=="" or username=="" or email=="" or password==""):
             return render_template("signup.html",disp="block",error="Fields cannot be empty.")
 
