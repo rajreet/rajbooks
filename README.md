@@ -1,3 +1,3 @@
-# Project 1
+# RajBooks
 
-Web Programming with Python and JavaScript
+A simple web application using Flask.
