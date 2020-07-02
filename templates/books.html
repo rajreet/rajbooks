@@ -1,0 +1,34 @@
+{% extends "layout.html" %}
+{% block body%}
+    <h1>RajBooks</h1>
+
+    <div class=booklist-wrapper>
+    {% for book in books %}
+        <div class="booklist">{{ book.title }}</div>
+    {% endfor %}
+    </div>
+
+    <div class=pagelist>
+
+        {% if currpage!=1 %}
+            <span id="left-page"><a href="{{ url_for('books',page=currpage-1) }}">&lt;-</a></span>
+        {% else %}
+            <span id="left-page"><a href="{{ url_for('books',page=currpage) }}">&lt;-</a></span>
+        {% endif %}
+
+        {% for page in pagelist %}
+            {% if page==currpage %}
+                <span class=page ><a href="{{ url_for('books',page=page) }}" id=currpage>{{ page }}</a></span>
+            {% else %}
+                <span class=page ><a href="{{ url_for('books',page=page) }}">{{ page }}</a></span>
+            {% endif %}
+        {% endfor %}
+
+        {% if currpage!=pagelen %}
+            <span id="right-page"><a href="{{ url_for('books',page=currpage+1) }}">-&gt;</a></span>
+        {% else %}
+            <span id="right-page"><a href="{{ url_for('books',page=currpage) }}">-&gt;</a></span>
+        {% endif %}
+        
+    </div>
+{% endblock %}

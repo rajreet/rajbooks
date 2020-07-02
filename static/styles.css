@@ -39,7 +39,7 @@ body{
 .formlogin .btn
 {
     color: #F4EDEA;
-    background-color:#06BCC1;
+    background-color:#17BEBB;
     width: 45%;
     margin:auto;
     
@@ -48,7 +48,7 @@ body{
 .formsignup .btn
 {
     color: #F4EDEA;
-    background-color:#06BCC1;
+    background-color:#17BEBB;
     width: 30%;
     margin:auto;
     
@@ -62,4 +62,42 @@ body{
     text-align: center;
     width:75%;
     margin:auto;
+}
+
+.booklist{
+    border-style:solid;
+    border-width: 1px;
+    border-color: #7C7A7A;
+    padding: 10px;
+    border-radius: 5px;
+    width:80%;
+    margin:auto;
+    margin-top: 10px;
+
+}
+
+.booklist:hover {
+    color: #F4EDEA;
+    background-color:#17BEBB;
+    border-color:#F4EDEA;
+}
+.booklist-wrapper{
+    margin-top: 50px;
+}
+
+.page{
+    margin:auto;
+    padding:10px;
+}
+
+#currpage{
+    color:#12263A;
+    font-weight: bold;
+}
+.pagelist
+{
+    text-align:center;
+    width:50%;
+    margin:auto;
+    margin-top:20px;    
 }

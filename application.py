@@ -37,7 +37,7 @@ def index():
             # print(pwd)
 
             if(pwd==password):
-                return redirect(url_for('books'))
+                return redirect(url_for('books',page=1))
             else:
                 #invalid password
                 return render_template("index.html",disp="none",p_error="Invalid Password.")    
@@ -68,7 +68,42 @@ def signup():
 
 @app.route("/books")
 def books():
-    return render_template("books.html")
+    #store list of books in session
+    if session.get("books") is None:
+        session["books"]=db.execute("SELECT * FROM books").fetchall()
+
+    page=int(request.args['page'])
+    #display books per page
+    size=50
+
+    #maximum page number
+    page_length=int(len(session["books"])/size)
+    if(page>page_length):
+        return "Page Not Found"
+
+    
+    #for pagination
+    start=size*(page-1)
+    end=size*page
+
+    lpage=page
+    rpage=page+10
+
+    #for pagination limits
+    if page<=5:
+        lpage=1
+        rpage=10
+    elif page>page_length-5:
+        lpage=page_length-10
+        rpage=page_length
+    else:
+        lpage-=5
+        rpage-=5
+
+    pagelist=range(lpage,rpage+1)
+    
+    return render_template("books.html",books=session["books"][start:end],pagelist=pagelist,currpage=page,pagelen=page_length)
+    
     
 
         
