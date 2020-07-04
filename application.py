@@ -23,6 +23,9 @@ db = scoped_session(sessionmaker(bind=engine))
 
 @app.route("/",methods=["POST","GET"])
 def index():
+    if "name" in session:
+        return redirect(url_for('books',page=1))
+    
     if request.method=="GET":
         if 'display' in request.args:
             return render_template("index.html",disp="block",message="You have been registered succesfully.")
@@ -36,7 +39,10 @@ def index():
             pwd=passwords[0]
             # print(pwd)
 
+            #login
             if(pwd==password):
+                name=db.execute(f"SELECT username FROM users WHERE email='{email}'").fetchone()
+                session["name"]=name[0]
                 return redirect(url_for('books',page=1))
             else:
                 #invalid password
@@ -68,6 +74,9 @@ def signup():
 
 @app.route("/books")
 def books():
+    if session.get("name") is None:
+        return render_template("error.html",message="User not logged in.")
+
     #store list of books in session
     if session.get("books") is None:
         session["books"]=db.execute("SELECT * FROM books").fetchall()
@@ -79,7 +88,7 @@ def books():
     #maximum page number
     page_length=int(len(session["books"])/size)
     if(page>page_length):
-        return "Page Not Found"
+        return render_template("error.html",message="Page not Found")
 
     
     #for pagination
@@ -102,7 +111,13 @@ def books():
 
     pagelist=range(lpage,rpage+1)
     
-    return render_template("books.html",books=session["books"][start:end],pagelist=pagelist,currpage=page,pagelen=page_length)
+    return render_template("books.html",books=session["books"][start:end],pagelist=pagelist,currpage=page,pagelen=page_length,uname=session["name"])
+
+@app.route("/logout")
+def logout():
+    del session["name"]
+    return redirect(url_for('index'))
+
     
     
 

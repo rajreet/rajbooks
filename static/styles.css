@@ -6,6 +6,7 @@ body{
 
 .mainheading{
     text-align: center;
+    /* margin:30px; */
 }
 
 #formcontainer{
@@ -100,4 +101,11 @@ body{
     width:50%;
     margin:auto;
     margin-top:20px;    
+}
+
+
+.top-right{
+    position:absolute;
+    top:30px;
+    right:30px;
 }

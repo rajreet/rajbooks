@@ -1,7 +1,5 @@
-{% extends "layout.html" %}
+{% extends "layout2.html" %}
 {% block body%}
-    <h1>RajBooks</h1>
-
     <div class=booklist-wrapper>
     {% for book in books %}
         <div class="booklist">{{ book.title }}</div>
