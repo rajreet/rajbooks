@@ -1,12 +1,26 @@
 {% extends "layout2.html" %}
 {% block body%}
+    <form class="form-inline" action="{{ url_for('books',page=currpage) }}" id="booksearch">
+        <input type="text" placeholder="Search Rajbooks" class="form-control" name="search">
+
+        <select name="searchby" class="form-control" size=1 placeholder="Search By">
+            <option value="name" selected hidden>Search By</option>
+            <option value=name>Title</option>
+            <option value=author>Author</option>
+            <option value=isbn>ISBN</option>
+            <option value=year>Year</option>
+        </select>
+
+        <button class=btn id=searchbtn> Search </button>
+    </form>
+
     <div class=booklist-wrapper>
     {% for book in books %}
-        <div class="booklist">{{ book.title }}</div>
+        <div class="booklist">{{ book.title }} ({{book.year}})&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp; {{ book.author }}</div>
     {% endfor %}
     </div>
 
-    <div class=pagelist>
+<div class=pagelist style="display:{{ disp }};">
 
         {% if currpage!=1 %}
             <span id="left-page"><a href="{{ url_for('books',page=currpage-1) }}">&lt;-</a></span>

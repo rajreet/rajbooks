@@ -109,3 +109,19 @@ body{
     top:30px;
     right:30px;
 }
+
+#booksearch{
+    position:absolute;
+    top:25px;
+    right:200px;
+}
+
+#searchbtn{
+    color: #F4EDEA;
+    background-color:#17BEBB;
+    margin-left: 10px;
+}
+
+.bookheading{
+    color:#12263A;
+}

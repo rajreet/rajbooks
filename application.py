@@ -4,6 +4,7 @@ from flask import *
 from flask_session import Session
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
+from fuzzywuzzy import fuzz,process
 
 app = Flask(__name__)
 
@@ -19,6 +20,14 @@ Session(app)
 # Set up database
 engine = create_engine(os.getenv("DATABASE_URL"))
 db = scoped_session(sessionmaker(bind=engine))
+
+class Book:
+    def __init__(self,title,author,isbn,year,ratio):
+        self.title=title
+        self.author=author
+        self.isbn=isbn
+        self.year=int(year)
+        self.ratio=ratio
 
 
 @app.route("/",methods=["POST","GET"])
@@ -81,37 +90,84 @@ def books():
     if session.get("books") is None:
         session["books"]=db.execute("SELECT * FROM books").fetchall()
 
-    page=int(request.args['page'])
-    #display books per page
-    size=50
+    if "page" in request.args:
+        page=int(request.args['page'])
+        #display books per page
+        size=50
 
-    #maximum page number
-    page_length=int(len(session["books"])/size)
-    if(page>page_length):
-        return render_template("error.html",message="Page not Found")
+        #maximum page number
+        page_length=int(len(session["books"])/size)
+        if(page>page_length):
+            return render_template("error.html",message="Page not Found")
 
-    
-    #for pagination
-    start=size*(page-1)
-    end=size*page
+        
+        #for pagination
+        start=size*(page-1)
+        end=size*page
 
-    lpage=page
-    rpage=page+10
+        lpage=page
+        rpage=page+10
 
-    #for pagination limits
-    if page<=5:
-        lpage=1
-        rpage=10
-    elif page>page_length-5:
-        lpage=page_length-10
-        rpage=page_length
+        #for pagination limits
+        if page<=5:
+            lpage=1
+            rpage=10
+        elif page>page_length-5:
+            lpage=page_length-10
+            rpage=page_length
+        else:
+            lpage-=5
+            rpage-=5
+
+        pagelist=range(lpage,rpage+1)
+        
+        return render_template("books.html",books=session["books"][start:end],pagelist=pagelist,currpage=page,pagelen=page_length,uname=session["name"],disp="block")
+
     else:
-        lpage-=5
-        rpage-=5
+        #search parameters
+        search=request.args['search']
+        option=request.args['searchby']
 
-    pagelist=range(lpage,rpage+1)
-    
-    return render_template("books.html",books=session["books"][start:end],pagelist=pagelist,currpage=page,pagelen=page_length,uname=session["name"])
+        booklist=[]
+
+        #search by name
+        if option=="name":
+            for book in session["books"]:
+                ratio=fuzz.partial_ratio(search.upper(),book.title.upper())
+                if ratio > 70:
+                    obj=Book(book.title,book.author,book.isbn,book.year,ratio)
+                    booklist.append(obj)
+        
+        #search by author
+        if option=="author":
+            for book in session["books"]:
+                ratio=fuzz.partial_ratio(search.upper(),book.author.upper())
+                if ratio > 70:
+                    obj=Book(book.title,book.author,book.isbn,book.year,ratio)
+                    booklist.append(obj)
+        
+        #search by isbn
+        if option=="isbn":
+            for book in session["books"]:
+                ratio=fuzz.partial_ratio(search.upper(),book.isbn.upper())
+                if ratio > 70:
+                    obj=Book(book.title,book.author,book.isbn,book.year,ratio)
+                    booklist.append(obj)
+            
+        #search by year    
+        if option=="year":
+            for book in session["books"]:
+                year=str(book.year)
+                ratio=fuzz.partial_ratio(search.upper(),year.upper())
+                if ratio > 70:
+                    obj=Book(book.title,book.author,book.isbn,book.year,ratio)
+                    booklist.append(obj)
+
+
+        #sort according to match ratio by fuzzy logic
+        booklist.sort(key=lambda x: x.ratio,reverse=True)
+
+        return render_template("books.html",books=booklist[:50],pagelist={1},currpage=1,pagelen=1,uname=session["name"],disp="none")
 
 @app.route("/logout")
 def logout():
