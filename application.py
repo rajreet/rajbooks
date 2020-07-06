@@ -13,7 +13,7 @@ if not os.getenv("DATABASE_URL"):
     raise RuntimeError("DATABASE_URL is not set")
 
 # Configure session to use filesystem
-app.config["SESSION_PERMANENT"] = False
+app.config["SESSION_PERMANENT"] = True
 app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
@@ -21,6 +21,7 @@ Session(app)
 engine = create_engine(os.getenv("DATABASE_URL"))
 db = scoped_session(sessionmaker(bind=engine))
 
+#Book structure class with match ratio(levenshtein distance)
 class Book:
     def __init__(self,title,author,isbn,year,ratio):
         self.title=title
@@ -32,10 +33,12 @@ class Book:
 
 @app.route("/",methods=["POST","GET"])
 def index():
+    #if username exists in session(user logged in)
     if "name" in session:
         return redirect(url_for('books',page=1))
     
     if request.method=="GET":
+        #resgistration successfull
         if 'display' in request.args:
             return render_template("index.html",disp="block",message="You have been registered succesfully.")
         else:
@@ -75,6 +78,7 @@ def signup():
             return render_template("signup.html",disp="block",error="Fields cannot be empty.")
 
         try:
+            #register user into database
             db.execute("INSERT INTO users VALUES(:username,:name,:email,:password)",{"username":username,"name":name,"email":email,"password":password})
             db.commit()
             return redirect(url_for('index',display=True))
@@ -83,6 +87,7 @@ def signup():
 
 @app.route("/books")
 def books():
+    #if username exists in session
     if session.get("name") is None:
         return render_template("error.html",message="User not logged in.")
 
@@ -92,6 +97,7 @@ def books():
 
     if "page" in request.args:
         page=int(request.args['page'])
+
         #display books per page
         size=50
 
@@ -164,10 +170,20 @@ def books():
                     booklist.append(obj)
 
 
-        #sort according to match ratio by fuzzy logic
+        #sort according to match ratio by fuzzy logic(levenshtein distance)
         booklist.sort(key=lambda x: x.ratio,reverse=True)
 
         return render_template("books.html",books=booklist[:50],pagelist={1},currpage=1,pagelen=1,uname=session["name"],disp="none")
+
+@app.route("/book/<string:isbn>")
+def book(isbn):
+    
+    for ele in session["books"]:
+        if ele.isbn==isbn:
+            book=ele
+
+    return render_template("book.html",book=book,uname=session["name"])
+
 
 @app.route("/logout")
 def logout():

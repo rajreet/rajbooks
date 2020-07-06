@@ -124,4 +124,53 @@ body{
 
 .bookheading{
     color:#12263A;
+    display:inline;
+    font-weight: bold;
+}
+
+.booklink{
+    color:#12263A;   
+    /* border-style:solid; */
+    display:inline;
+}
+
+#bookinfo{
+    margin-top: 50px;
+}
+
+.bookauthor,.ratingvalue{
+    font-weight: 200;
+}
+
+#bookrating{
+    text-align: center;
+}
+
+#reviewheading{
+    font-weight: 500;
+}
+
+.review,.reviewformtext{
+    margin-top:20px;
+    padding: 10px;
+    width:80%;
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 5px;
+    background-color: white;
+}
+
+.reviewform .btn{
+    margin-top:10px;
+    color: #F4EDEA;
+    background-color:#17BEBB;
+    display: block;
+}
+
+.reviewtext{
+    font-weight: 250;
+}
+.reviewuser{
+    font-weight: 600;
+    color:#17BEBB;
 }
