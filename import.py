@@ -12,6 +12,13 @@ engine = create_engine(os.getenv("DATABASE_URL"))
 db = scoped_session(sessionmaker(bind=engine))
 
 try:
+    db.execute("CREATE TABLE users(username VARCHAR PRIMARY KEY,name VARCHAR, email VARCHAR, password VARCHAR);")
+except:
+    print("Database reviews exists")
+
+db.commit()
+
+try:
     db.execute("CREATE TABLE books( isbn VARCHAR PRIMARY KEY, title VARCHAR  NOT NULL,author VARCHAR  NOT NULL, year INTEGER NOT NULL );")
     print("Database books created")
 except:
