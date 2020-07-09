@@ -9,6 +9,7 @@ body{
     /* margin:30px; */
 }
 
+
 #formcontainer{
     padding:70px 0;
 }
@@ -145,6 +146,18 @@ body{
 #bookrating{
     text-align: center;
 }
+
+#bookrating .btn{
+    color:#17BEBB;
+    
+}
+
+#bookrating .btn:hover{
+    color: #F4EDEA;
+    background-color:#17BEBB;
+    
+}
+
 
 #reviewheading{
     font-weight: 500;

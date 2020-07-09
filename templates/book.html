@@ -8,30 +8,31 @@
 
         <div id="bookrating" class=col-6>
             <h3>Rating</h3>
-            <h4 class=ratingvalue>4.04</h4>
+            <h4 class=ratingvalue>{{ rating }}</h4>
+            <span style="font-weight: 250;">Your rating</span><br>
+            <form action="{{url_for('book',isbn=book.isbn)}}" method="post">
+                <div class="btn-group btn-group-sm">
+                    <button class="btn" name=userrating value=1>1</button>
+                    <button class="btn" name=userrating value=2>2</button>
+                    <button class="btn" name=userrating value=3>3</button>
+                    <button class="btn" name=userrating value=4>4</button>
+                    <button class="btn" name=userrating value=5>5</button>
+                </div>
+            </form>
         </div>
     </div>
     <hr>
     <h3 class="reviewheading">Reviews</h3>
+    {% for review in reviews %}
     <div class="review">
-        <h5 class=reviewuser>user1</h5>
-        <small class="text-muted">15/07/2020</small>
-        <p class="reviewtext">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-         Nunc scelerisque viverra mauris in aliquam sem fringilla ut. Eget sit amet tellus cras adipiscing. 
-         Volutpat diam ut venenatis tellus in metus. </p>
+        <h5 class=reviewuser>{{ review.username }}</h5>
+        <small class="text-muted">{{ review.reviewdate }}</small>
+        <p class="reviewtext">{{ review.text }}</p>
     </div>
-    <div class="review">
-        <h5 class=reviewuser>user2</h5>
-        <p class="reviewtext"> Dictum sit amet justo donec enim diam. Et malesuada fames ac turpis egestas integer eget aliquet. 
-            Sagittis purus sit amet volutpat. Neque aliquam vestibulum morbi blandit cursus risus at ultrices. </p>
-    </div>
-    <div class="review">
-        <h5 class=reviewuser>user3</h5>
-        <p class="reviewtext">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-    </div>
+    {% endfor %}
 
-    <form action="#" class="reviewform">
-        <textarea placeholder="Add a review...." class="reviewformtext"></textarea>
+    <form action="{{ url_for('book',isbn=book.isbn)}}" class="reviewform" method="post">
+        <textarea placeholder="Add a review...." class="reviewformtext" name="reviewsubmit"></textarea>
         <button class="btn">Submit Review</button>
     </form>
 {% endblock %}

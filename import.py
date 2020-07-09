@@ -13,9 +13,9 @@ db = scoped_session(sessionmaker(bind=engine))
 
 try:
     db.execute("CREATE TABLE books( isbn VARCHAR PRIMARY KEY, title VARCHAR  NOT NULL,author VARCHAR  NOT NULL, year INTEGER NOT NULL );")
-    print("Database created")
+    print("Database books created")
 except:
-    print("Database Exists")
+    print("Database books Exists")
 
 with open('books.csv') as bookscsv:
     books=csv.reader(bookscsv)
@@ -34,8 +34,21 @@ with open('books.csv') as bookscsv:
         title=title.replace("'","''")
         author=author.replace("'","''")
 
-        db.execute(f"INSERT INTO books VALUES ('{isbn}','{title}','{author}',{year});")
-        count+=1
-        print(f"Inserted {count}.")
+        try:
+            db.execute(f"INSERT INTO books VALUES ('{isbn}','{title}','{author}',{year});")
+            count+=1
+            print(f"Inserted {count}.")
+        except:
+            print("Entry Exists.")
+            break
+
+db.commit()
+
+try:
+    db.execute("CREATE TABLE reviews(id SERIAL PRIMARY KEY, username VARCHAR NOT NULL REFERENCES users(username) \
+    ON DELETE CASCADE ON UPDATE CASCADE, bookisbn VARCHAR NOT NULL REFERENCES books ON DELETE CASCADE ON UPDATE CASCADE,\
+    text VARCHAR NOT NULL, reviewdate TIMESTAMP);")
+except:
+    print("Database reviews exists")
 
 db.commit()
