@@ -52,3 +52,13 @@ except:
     print("Database reviews exists")
 
 db.commit()
+
+try:
+    #primary key set to isbn and username so that each user can give a specific rating to a book
+    db.execute("CREATE TABLE ratings(id SERIAL, username VARCHAR NOT NULL REFERENCES users(username) \
+    ON DELETE CASCADE ON UPDATE CASCADE, bookisbn VARCHAR NOT NULL REFERENCES books ON DELETE CASCADE ON UPDATE CASCADE,\
+    score INTEGER, PRIMARY KEY(username,bookisbn));")
+except:
+    print("Database rating exists")
+
+db.commit()

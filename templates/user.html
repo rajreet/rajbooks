@@ -1,0 +1,21 @@
+{% extends "layout2.html" %}
+
+{% block body %}
+
+<h3 id=userheading>{{ uname }}</h3>
+<div id= userinfo>
+    <h5>Name: {{user.name}}</h5>
+    <h5>Email: {{user.email}}</h5>
+
+    <hr>
+
+    <h3 class="reviewheading">Reviews</h3>
+    {% for review in reviews %}
+    <div class="review">
+        <h5 class=reviewuser><a href="{{ url_for('book',isbn=review.isbn)}}" style="text-decoration: none;color: inherit;">{{ review.title }}</a></h5>
+        <small class="text-muted">{{ review.reviewdate }}</small>
+        <p class="reviewtext">{{ review.text }}</p>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

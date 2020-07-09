@@ -9,7 +9,8 @@
         <div id="bookrating" class=col-6>
             <h3>Rating</h3>
             <h4 class=ratingvalue>{{ rating }}</h4>
-            <span style="font-weight: 250;">Your rating</span><br>
+            <span >Your rating</span><br>
+            {%if notRated%}
             <form action="{{url_for('book',isbn=book.isbn)}}" method="post">
                 <div class="btn-group btn-group-sm">
                     <button class="btn" name=userrating value=1>1</button>
@@ -19,6 +20,9 @@
                     <button class="btn" name=userrating value=5>5</button>
                 </div>
             </form>
+            {% else %}
+            <span style="font-weight: 250;"> {{ userrating }} </span>
+            {% endif %}
         </div>
     </div>
     <hr>

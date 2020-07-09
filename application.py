@@ -183,11 +183,12 @@ def books():
 
 @app.route("/book/<string:isbn>",methods=["POST","GET"])
 def book(isbn):
-    
+    #if username exists in session
+    if session.get("name") is None:
+        return render_template("error.html",message="User not logged in.")
+
     #search for the book
     book=db.execute(f"SELECT * FROM books WHERE isbn='{isbn}'").fetchone()
-
-    print(book.rating_count)
 
     #get data from goodreads API if database does not have data
     if(book.rating_count is None):
@@ -204,32 +205,80 @@ def book(isbn):
     
     db.commit()
 
+    #check wether the user has rated or not
+    dbrating=db.execute(f"SELECT score FROM ratings WHERE username='{session['name']}' AND bookisbn='{book.isbn}'").fetchone()
+    if dbrating is None:
+        notRated=True
+    else:
+        dbrating=dbrating[0]
+        notRated=False
 
-    rating=round(rating_score/rating_count,2)
 
-    # print(bookapi)
-
-    #submit review
+    #submit review or rating
     if(request.method=='POST'):
+
+        #if the user submits a review
         if(request.form.get('reviewsubmit') is not None):
             review=request.form.get('reviewsubmit')
             if(review!=""):
                 date=datetime.now().strftime('%d/%m/%Y %H:%M:%S')
                 db.execute(f"INSERT INTO reviews(username,bookisbn,text,reviewdate) VALUES('{session['name']}','{book.isbn}','{review}','{date}');")
             db.commit()
-
-            return redirect(url_for('book',isbn=book.isbn))
+            
         
+        #if the user has rated the book
         if(request.form.get('userrating') is not None):
-            print(request.form.get('userrating'))
-            return redirect(url_for('book',isbn=book.isbn))
+            score=request.form.get('userrating')
+            
+            try:
+                db.execute(f"INSERT INTO ratings(username,bookisbn,score) VALUES('{session['name']}','{book.isbn}',{score});")
+                rating_score+=int(score)
+                rating_count+=1
+                db.execute(f"UPDATE books SET rating_count={rating_count}, rating_score={rating_score} WHERE isbn='{book.isbn}'")
+                notRated=False
+
+            except:
+                print("rating fail")  
+
+            db.commit()
+
+        return redirect(url_for('book',isbn=book.isbn))
 
     #select reviews from data base
     reviews=db.execute(f"SELECT * FROM reviews WHERE bookisbn='{book.isbn}'").fetchall()
 
+    #calculate rating
+    rating=round(rating_score/rating_count,2)
 
-    return render_template("book.html",book=book,uname=session["name"],rating=rating,reviews=reviews)
+    return render_template("book.html",book=book,uname=session["name"],rating=rating,reviews=reviews,notRated=notRated,userrating=dbrating)
 
+
+@app.route("/user/<string:username>")
+def user(username):
+    #if username exists in session
+    if session.get("name") is None:
+        return render_template("error.html",message="User not logged in.")
+
+    user=db.execute(f"SELECT * FROM users WHERE username='{username}'").fetchone()
+    reviews=db.execute(f"SELECT * FROM reviews INNER JOIN books ON (reviews.bookisbn=books.isbn) WHERE username='{username}'; ").fetchall()
+    return render_template("user.html",uname=username,reviews=reviews,user=user)
+
+@app.route("/api/<string:isbn>")
+def api(isbn):
+    book = db.execute(f"SELECT * FROM books WHERE isbn='{isbn}'").fetchone()
+
+    if(book is None):
+        return jsonify({"error":"Invalid ISBN"}),404
+    else:
+        return jsonify({
+            "title":book.title,
+            "author":book.author,
+            "year":book.year,
+            "isbn":book.isbn,
+            "rating_count":book.rating_count,
+            "average_rating":round(book.rating_score/book.rating_count,2)
+
+        })
 
 @app.route("/logout")
 def logout():
