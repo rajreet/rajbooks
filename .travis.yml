@@ -13,7 +13,7 @@ env:
 # command to run tests
 script:
   - flask run
-  
+ 
  deploy:
   - provider: heroku
   - app: rajbooks
