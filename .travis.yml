@@ -12,7 +12,7 @@ python:
 install:
   - pip install -r requirements.txt
 env:
-  - FLASK_APP="application.py" DATABASE_URL="postgres://wdyddmjqyfakha:64b9d0e4ba4547404914641020ecf0ad54d6716896f2ee16b6a819cf8f2533e8@ec2-35-169-254-43.compute-1.amazonaws.com:5432/d3hv5onjj0m64g"
+  - FLASK_APP=application.py DATABASE_URL=postgres://wdyddmjqyfakha:64b9d0e4ba4547404914641020ecf0ad54d6716896f2ee16b6a819cf8f2533e8@ec2-35-169-254-43.compute-1.amazonaws.com:5432/d3hv5onjj0m64g
 # command to run tests
 script:
   - flask run
