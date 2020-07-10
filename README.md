@@ -10,7 +10,7 @@ A simple web application using Flask.
 
 `DATABASE_URL="{postgres_url}"`
 
-`FALSK_APP="application.py"`
+`FLASK_APP="application.py"`
 
 *This may vary for PowerShell.*
 
