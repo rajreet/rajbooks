@@ -22,3 +22,5 @@ A simple web application using Flask.
 4. Run the application
 
 `flask run`
+
+https://www.linkedin.com/feed/update/urn:li:activity:6687018538374455296/
