@@ -16,7 +16,6 @@ if not os.getenv("DATABASE_URL"):
 # Configure session to use filesystem
 app.config["SESSION_PERMANENT"] = True
 app.config["SESSION_TYPE"] = "filesystem"
-app.config['SERVER_NAME'] = "https://rajbooks.herokuapp.com/"
 Session(app)
 
 # Set up database
